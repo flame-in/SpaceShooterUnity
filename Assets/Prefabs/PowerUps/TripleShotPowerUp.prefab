@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
+  _powerUpPickup: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   powerUpId: 0
 --- !u!95 &5313330915457856805
 Animator:

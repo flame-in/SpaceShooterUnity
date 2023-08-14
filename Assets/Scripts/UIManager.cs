@@ -5,18 +5,13 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField]
-    private Text _scoreText;
-    [SerializeField]
-    private Image _livesImage;
-    [SerializeField]
-    private Sprite[] _livesSprite;
-    [SerializeField]
-    private Text _gameOverText;
-    [SerializeField]
-    private Text _restartText;
-    [SerializeField]
-    private GameManager _gameManager;
+    [SerializeField]    private Text _scoreText;
+    [SerializeField]    private Image _livesImage;
+    [SerializeField]    private Sprite[] _livesSprite;
+    [SerializeField]    private Text _gameOverText;
+    [SerializeField]    private Text _restartText;
+    [SerializeField]    private GameManager _gameManager;
+
     // Start is called before the first frame update
     void Start()
     {

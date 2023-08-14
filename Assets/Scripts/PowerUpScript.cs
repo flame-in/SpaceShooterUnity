@@ -4,21 +4,14 @@ using UnityEngine;
 
 public class PowerUpScript : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 3f;
-
+    [SerializeField]    private float _speed = 3f;
+    [SerializeField]    private AudioClip _powerUpPickup;
     //PowerUP IDs
     // 0 - TripleShot
     // 1 - Speed
     // 2 - Shields
 
-    [SerializeField]
-    private int powerUpId;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]    private int powerUpId;
 
     // Update is called once per frame
     void Update()
@@ -38,6 +31,7 @@ public class PowerUpScript : MonoBehaviour
             PlayerScripts playerScripts = collision.GetComponent<PlayerScripts>();
             if(playerScripts != null)
             {
+                AudioSource.PlayClipAtPoint(_powerUpPickup, Camera.main.transform.position);
                 switch (powerUpId)
                 {
                     case 0: 
@@ -62,6 +56,7 @@ public class PowerUpScript : MonoBehaviour
             {
                 Debug.LogError("NullException - Error fetching player gameobject.");
             }
+            
             Destroy(this.gameObject);
         }
     }

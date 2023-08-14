@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class WeaponScript : MonoBehaviour
 {
-    [SerializeField]
-    private float _bulletSpeed = 4f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    [SerializeField]    private float _bulletSpeed = 4f;
+   
     // Update is called once per frame
     void Update()
     {

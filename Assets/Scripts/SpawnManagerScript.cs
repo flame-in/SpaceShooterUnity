@@ -5,20 +5,18 @@ using UnityEngine;
 public class SpawnManagerScript : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField]
-    private GameObject _enemyPrefab;
-    [SerializeField]
-    private GameObject[] _powerUpPrefab;
-    [SerializeField]
-    private GameObject _enemyContainer;
+    [SerializeField]    private GameObject _enemyPrefab;
+    [SerializeField]    private GameObject[] _powerUpPrefab;
+    [SerializeField]    private GameObject _enemyContainer;
 
     private bool _stopSpawning = false;
 
-    void Start()
+    public void startSpawning()
     {
         StartCoroutine(spawnEnemyRoutine());
         StartCoroutine(spawnPowerUpRoutine());
     }
+
 
     // Update is called once per frame
     void Update()
@@ -28,6 +26,7 @@ public class SpawnManagerScript : MonoBehaviour
 
     IEnumerator spawnEnemyRoutine()
     {
+        yield return new WaitForSeconds(3f);
         while (_stopSpawning == false)
         {
             GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-8.5f, 8.5f), 7f, 0f), Quaternion.identity);
@@ -38,6 +37,7 @@ public class SpawnManagerScript : MonoBehaviour
 
     IEnumerator spawnPowerUpRoutine()
     {
+        yield return new WaitForSeconds(3f);
         while (_stopSpawning == false)
         {
             int powerUpId = Random.Range(0, 2);

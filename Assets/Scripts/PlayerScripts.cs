@@ -4,46 +4,56 @@ using UnityEngine;
 
 public class PlayerScripts : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 6.5f;
-    [SerializeField]
-    private float _speedBoost = 9f;
-    [SerializeField]
-    private GameObject _laserPrefab;
-    [SerializeField]
-    private GameObject _tripleShotPrefab;
-    [SerializeField]
-    private float _fireRate = 0.2f;
+    [SerializeField]    private float _speed = 6.5f;
+    [SerializeField]    private float _speedBoost = 9f;
+    [SerializeField]    private GameObject _laserPrefab;
+    [SerializeField]    private GameObject _tripleShotPrefab;
+    [SerializeField]    private float _fireRate = 0.2f;
     private float _canFire = -1f;
-    [SerializeField]
-    private int _lives = 3;
-    [SerializeField]
-    private bool _isTripleShotEnabled = false;
-    [SerializeField]
-    private bool _isSpeedEnabled = false;
-    [SerializeField]
-    private bool _isShieldEnabled = false;
+    [SerializeField]    private int _lives = 3;
+    [SerializeField]    private bool _isTripleShotEnabled = false;
+    [SerializeField]    private bool _isSpeedEnabled = false;
+    [SerializeField]    private bool _isShieldEnabled = false;
     private SpawnManagerScript _spawnManager;
     private UIManager _UIManager;
-    [SerializeField]
-    private GameObject _laserContainer;
-    [SerializeField]
-    private GameObject _shieldsAura;
+    [SerializeField]    private GameObject _laserContainer;
+    [SerializeField]    private GameObject _shieldsAura;
+    [SerializeField]    private GameObject _leftThruster;
+    [SerializeField]    private GameObject _rightThruster;
 
-    [SerializeField]
-    private int _score;
+
+    [SerializeField]    private AudioClip _laserSound;
+    [SerializeField]    private AudioSource _audioSource;
+
+    [SerializeField]    private int _score;
 
 
     // Start is called before the first frame update
     void Start()
     {
         _shieldsAura.SetActive(false);
+        _rightThruster.SetActive(false);
+        _leftThruster.SetActive(false);
         transform.position = new Vector3(0, -2f, 0);
+        
+
+        // Getting all the required components from other objects, caching them
+        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource == null)
+        {
+            Debug.LogError("The audioSource is null.");
+        }
+        else
+        {
+            _audioSource.clip = _laserSound;
+        }
+
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManagerScript>();
         if (_spawnManager == null)
         {
             Debug.LogError("The spawnManager is null.");
         }
+
         _UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         if (_UIManager == null)
         {
@@ -101,8 +111,8 @@ public class PlayerScripts : MonoBehaviour
             GameObject newLaserShot = Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
             newLaserShot.transform.parent = _laserContainer.transform;
         }
-        
 
+        _audioSource.Play();
     }
 
     // Player taking damage - public method
@@ -113,6 +123,14 @@ public class PlayerScripts : MonoBehaviour
             _lives -= 1;
             _UIManager.UpdateLives(_lives);
             Debug.Log("Player is hit. Current life is : " + _lives);
+            if (_lives == 2)
+            {
+                _leftThruster.SetActive(true);
+            }
+            else if (_lives == 1)
+            {
+                _rightThruster.SetActive(true);
+            }
             if (_lives < 1)
             {
                 _spawnManager.OnPlayerDeath();
@@ -129,14 +147,14 @@ public class PlayerScripts : MonoBehaviour
         
     }
 
-    //Public method to enable triple shot powerUp - also starts coRoutine to disable the powerup in 5 seconds
+    //Public method to enable powerUp - also starts coRoutine to disable the powerup in 5 seconds
     public void EnableTripleShot()
     {
         _isTripleShotEnabled = true;
         StartCoroutine(TripleShotPowerDownRoutine());
-
     }
 
+    // Coroutine delays powerup being disabled for 5 seconds
     IEnumerator TripleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
